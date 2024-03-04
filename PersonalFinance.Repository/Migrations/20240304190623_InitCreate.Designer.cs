@@ -12,7 +12,7 @@ using PersonalFinance.Repository;
 namespace PersonalFinance.Repository.Migrations
 {
     [DbContext(typeof(PFDbContext))]
-    [Migration("20240303215452_InitCreate")]
+    [Migration("20240304190623_InitCreate")]
     partial class InitCreate
     {
         /// <inheritdoc />
