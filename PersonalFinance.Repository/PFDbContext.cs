@@ -21,6 +21,6 @@ public class PFDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.SeedWithData(new DataSeed());
+        //modelBuilder.SeedWithData(new DataSeed());
     }
 }
