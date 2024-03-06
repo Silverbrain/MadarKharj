@@ -12,12 +12,10 @@ public interface IEntryRepository
 
     public Task<IEnumerable<Entry>> GetEntries();
     public Task<IEnumerable<Entry>> SearchEntries(
-        Guid? entryId,
-        DateTime? start,
-        DateTime? end,
+        DateTime? fromDate,
+        DateTime? toDate,
         double? lowerBoundAmount,
         double? upperBoundAmount,
-        string? accountName,
-        int accountId
+        string? accountName
     );
 }
