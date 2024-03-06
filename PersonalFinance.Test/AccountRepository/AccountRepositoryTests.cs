@@ -24,5 +24,6 @@ public class AccountRepositoryTests
 
         //Assert
         res.Should().NotBeNull();
+        res.Should().HaveCountGreaterThan(0);
     }
 }

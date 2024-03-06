@@ -8,13 +8,14 @@
             "projectPath": "${workspaceFolder}/PersonalFinance/PersonalFinance.csproj"
         },
         
-        {
-            "name": "Console: MK Test",
-            "type": "dotnet",
-            "request": "launch",
-            "projectPath": "${workspaceFolder}/PersonalFinance.Test/PersonalFinance.Test.csproj",
-            "launchConfigurationId": "TargetFramework=;PersonalFinance.Test",
-            "internalConsoleOptions": "openOnFirstSessionStart"
-        }
+        //Console test project
+        // {
+        //     "name": "Console: MK Test",
+        //     "type": "dotnet",
+        //     "request": "launch",
+        //     "projectPath": "${workspaceFolder}/PersonalFinance.Test/PersonalFinance.Test.csproj",
+        //     "launchConfigurationId": "TargetFramework=;PersonalFinance.Test",
+        //     "internalConsoleOptions": "openOnFirstSessionStart"
+        // }
     ]
 }
