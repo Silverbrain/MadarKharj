@@ -11,7 +11,6 @@ public interface IAccountRepository
     public Task<Account> DeleteAccountAsync(int accountId);
     public Task<IEnumerable<Account>> GetAccountsAsync();
     public Task<IEnumerable<Account>> SearchAccountAsync(
-        int? accountId,
         string? name
     );
 }

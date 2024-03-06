@@ -137,7 +137,7 @@ public class EntryRepository : IEntryRepository
             }
 
             //account Name filter
-            if(accountName != null)
+            if (accountName != null)
             {
                 entries = entries.Where(e => e.Account.Name.Contains(accountName));
             }
@@ -160,13 +160,19 @@ public class EntryRepository : IEntryRepository
         {
             Entry? entryToUpdate = await dbContext.Entries.FindAsync(entry.Id);
 
+            if (entryToUpdate == null)
+            {
+                throw new Exception($"Error updating Entry object with Id = {entry.Id}.", new NullReferenceException());
+            }
+
             entryToUpdate.AccountId = entry.AccountId;
             entryToUpdate.Amount = entry.Amount;
             entryToUpdate.TransactionId = entry.TransactionId;
 
+            EntityEntry<Entry> res = dbContext.Entries.Update(entryToUpdate);
             await dbContext.SaveChangesAsync();
 
-            return entryToUpdate;
+            return res.Entity;
         }
         catch (Exception e)
         {

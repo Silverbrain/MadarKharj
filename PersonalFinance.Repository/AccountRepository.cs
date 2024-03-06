@@ -104,7 +104,7 @@ public class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task<IEnumerable<Account>> SearchAccountAsync(int? accountId, string? name)
+    public async Task<IEnumerable<Account>> SearchAccountAsync(string? name)
     {
         try
         {
@@ -113,10 +113,6 @@ public class AccountRepository : IAccountRepository
 
             await Task.Run(() =>
             {
-                if (accountId != null)
-                {
-                    query = query.Where(a => a.Id == accountId);
-                }
                 if (name != null)
                 {
                     query = query.Where(a => a.Name.Contains(name));
@@ -141,16 +137,17 @@ public class AccountRepository : IAccountRepository
         {
             var accountToEdit = await dbContext.Accounts.FindAsync(account.Id);
 
-            if (accountToEdit != null)
+            if (accountToEdit == null)
             {
-                accountToEdit.Name = account.Name;
-
-                var res = dbContext.Accounts.Update(accountToEdit);
-                await dbContext.SaveChangesAsync();
-
-                return res.Entity;
+                throw new Exception($"Error updating account with {{Id = {account.Id}}}.", new NullReferenceException());
             }
-            return null;
+
+            accountToEdit.Name = account.Name;
+
+            var res = dbContext.Accounts.Update(accountToEdit);
+            await dbContext.SaveChangesAsync();
+
+            return res.Entity;
         }
         catch (Exception e)
         {
