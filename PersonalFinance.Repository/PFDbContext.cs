@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using PersonalFinance.Shared;
 
 namespace PersonalFinance.Repository;
 
-public class PFDbContext : DbContext
+public class PFDbContext : IdentityDbContext<ApplicationUser>
 {
     private readonly string _connectionString = "Server= localhost,1433; Database = SPFPDataBase; User Id = SA; Password = S!na8481780; MultipleActiveResultSets=true; TrustServerCertificate=True";
 
