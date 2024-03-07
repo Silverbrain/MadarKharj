@@ -16,11 +16,7 @@ public class PFDbContext : IdentityDbContext<ApplicationUser>
     public PFDbContext(DbContextOptions<PFDbContext> options) : base(options)
     {
     }
-
-    public PFDbContext()
-    {
-    }
-
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (optionsBuilder.IsConfigured)
