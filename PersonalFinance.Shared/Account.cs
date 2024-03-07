@@ -15,11 +15,10 @@ public class Account
 
     public override string ToString()
     {
-        var acc = new StringBuilder("{");
+        var acc = new StringBuilder("");
 
         acc.Append($"\"ID\" : \"{Id}\"");
         acc.Append($", \"Name\" : \"{Name}\"");
-        acc.Append("}");
         
         return acc.ToString();
     }
