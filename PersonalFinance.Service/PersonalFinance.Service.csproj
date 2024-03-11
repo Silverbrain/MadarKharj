@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PersonalFinance.Shared\PersonalFinance.Shared.csproj" />
+    <ProjectReference Include="..\PersonalFinance.Repository\PersonalFinance.Repository.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
