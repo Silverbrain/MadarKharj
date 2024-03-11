@@ -8,9 +8,9 @@ namespace PersonalFinance.Repository;
 public class AccountRepository : IAccountRepository
 {
     private readonly PFDbContext dbContext;
-    private readonly ILogger logger;
+    private readonly ILogger<AccountRepository> logger;
 
-    public AccountRepository(PFDbContext dbContext, ILogger logger)
+    public AccountRepository(PFDbContext dbContext, ILogger<AccountRepository> logger)
     {
         this.dbContext = dbContext;
         this.logger = logger;
