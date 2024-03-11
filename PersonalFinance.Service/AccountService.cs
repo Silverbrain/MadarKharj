@@ -33,7 +33,7 @@ public class AccountService : IAccountService
 
     public async Task<IEnumerable<Account>> GetAccountsAsync()
     {
-        return await GetAccountsAsync();
+        return await accountRepository.GetAccountsAsync();
     }
 
     public Task<IEnumerable<Account>> SearchAccountAsync(string accountName)
