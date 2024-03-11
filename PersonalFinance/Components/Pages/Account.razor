@@ -1,0 +1,37 @@
+﻿@page "/Account"
+@inject IAccountService accountService
+
+<h3>Account</h3>
+@if (accounts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var acc in accounts)
+            {
+                <tr>
+                    <td>@acc.Id.ToString()</td>
+                    <td>@acc.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Shared.Account>? accounts = null;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        accounts = (await accountService.GetAccountsAsync()).ToList();
+    }
+}

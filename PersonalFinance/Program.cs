@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using PersonalFinance.Client.Pages;
 using PersonalFinance.Components;
+using PersonalFinance.Repository;
+using PersonalFinance.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddLogging(ops => ops.AddConsole());
+
+builder.Services.AddDbContext<PFDbContext>(ops =>{
+    ops.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+});
+
+builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+builder.Services.AddTransient<IAccountService, AccountService>();
 
 var app = builder.Build();
 
