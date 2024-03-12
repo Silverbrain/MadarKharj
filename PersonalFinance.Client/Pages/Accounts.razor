@@ -1,0 +1,97 @@
+﻿@page "/Account"
+@attribute [StreamRendering]
+@inject IAccountService accountService
+
+<h1>Accounts</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <a href='/account/add' class="btn btn-primary" role="button">
+            <i class="fa fa-user-plus"></i>
+            Add Account
+        </a>
+    </div>
+    <div class="input-group col">
+        <input type="text" class="form-control" placeholder="Search account by name"
+               @bind="SearchString" @bind:event="oninput" @onkeyup="FilterAccount" />
+        @if (SearchString.Length > 0)
+        {
+            <div class="input-group-append">
+                <button class="btn btn-danger" @onclick="ResetSearch">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<br />
+@if (accountList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped align-middle table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in accountList)
+            {
+                <tr>
+                    <td>@account.Id</td>
+                    <td>@account.Name</td>
+                    <td>
+                        <a href='/account/edit/@account.Id' class="btn btn-outline-dark" role="button">
+                            Edit
+                        </a>
+                        <a href='/account/delete/@account.Id' class="btn btn-outline-danger" role="button">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+@code {
+    protected List<Account> accountList = new();
+    protected List<Account> searchAccountData = new();
+    //protected Account acc = new();
+    protected string SearchString { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAccounts();
+    }
+    protected async Task GetAccounts()
+    {
+        accountList = (await accountService.GetAccountsAsync()).ToList();
+        searchAccountData = accountList;
+    }
+    protected void FilterAccount()
+    {
+        if (!string.IsNullOrEmpty(SearchString))
+        {
+            accountList = searchAccountData
+                .Where(x => x.Name!.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
+                .ToList();
+        }
+        else
+        {
+            accountList = searchAccountData;
+        }
+    }
+    @* protected void DeleteConfirm(int accountId)
+    {
+        acc = accountList.FirstOrDefault(x => x.Id == accountId);
+    } *@
+    public void ResetSearch()
+    {
+        SearchString = string.Empty;
+        accountList = searchAccountData;
+    }
+}
