@@ -71,11 +71,6 @@ public class AccountController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteAccount(int id)
     {
-        if (id == null)
-        {
-            return BadRequest();
-        }
-
         var res = await accountService.DeleteAccountAsync(id);
 
         if(res == null)
