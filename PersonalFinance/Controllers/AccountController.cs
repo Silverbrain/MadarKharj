@@ -58,14 +58,9 @@ public class AccountController : ControllerBase
             return BadRequest();
         }
 
-        var updatedAcc = await accountService.UpdateAccountAsync(account);
+        var res = await accountService.UpdateAccountAsync(account);
 
-        if (updatedAcc == null)
-        {
-            return NotFound();
-        }
-
-        return NoContent();
+        return StatusCode(StatusCodes.Status202Accepted, res);
     }
 
     [HttpDelete("{id:int}")]
@@ -73,11 +68,6 @@ public class AccountController : ControllerBase
     {
         var res = await accountService.DeleteAccountAsync(id);
 
-        if(res == null)
-        {
-            return NotFound();
-        }
-
-        return NoContent();
+        return StatusCode(StatusCodes.Status202Accepted, res);
     }
 }

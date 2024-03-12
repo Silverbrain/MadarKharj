@@ -14,24 +14,25 @@ public class ClientAccountService : IAccountService
         this.httpClient = httpClient;
     }
 
-    public Task<Account> CreateAccountAsync(Account account)
+    public async Task<Account> CreateAccountAsync(Account account)
     {
-        throw new NotImplementedException();
+        var res = await httpClient.PostAsJsonAsync("/api/account", account);
+        return (await res.Content.ReadFromJsonAsync<Account>())!;
     }
 
-    public Task<Account> DeleteAccountAsync(int accountId)
+    public async Task<Account> DeleteAccountAsync(int accountId)
     {
-        throw new NotImplementedException();
+        return (await httpClient.DeleteFromJsonAsync<Account>($"/api/account/{accountId}"))!;
     }
 
-    public Task<Account> GetAccountAsync(int accountId)
+    public async Task<Account> GetAccountAsync(int accountId)
     {
-        throw new NotImplementedException();
+        return (await httpClient.GetFromJsonAsync<Account>($"/api/account/{accountId}"))!;
     }
 
     public async Task<IEnumerable<Account>> GetAccountsAsync()
     {
-        return await httpClient.GetFromJsonAsync<IEnumerable<Account>>("/api/account");
+        return (await httpClient.GetFromJsonAsync<IEnumerable<Account>>("/api/account"))!;
     }
 
     public Task<IEnumerable<Account>> SearchAccountAsync(string accountName)
@@ -39,8 +40,15 @@ public class ClientAccountService : IAccountService
         throw new NotImplementedException();
     }
 
-    public Task<Account> UpdateAccountAsync(Account account)
+    public async Task<Account> UpdateAccountAsync(Account account)
     {
-        throw new NotImplementedException();
+        if(account.Id == 0)
+        {
+            throw new NullReferenceException();
+        }
+
+        var res = await httpClient.PutAsJsonAsync($"/api/account/{account.Id}", account);
+
+        return (await res.Content.ReadFromJsonAsync<Account>())!;
     }
 }
