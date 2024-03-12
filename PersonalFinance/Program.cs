@@ -11,6 +11,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddControllers();
+
+builder.Services.AddScoped(http => new HttpClient{
+    BaseAddress = new Uri(builder.Configuration.GetSection("BaseUri").Value!)
+});
+
 builder.Services.AddLogging(ops => ops.AddConsole());
 
 builder.Services.AddDbContext<PFDbContext>(ops =>{
@@ -35,6 +41,8 @@ else
 }
 
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
