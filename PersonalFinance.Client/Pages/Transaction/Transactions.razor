@@ -1,0 +1,98 @@
+﻿@page "/transaction"
+@attribute [StreamRendering]
+@inject ITransactionService tranService
+
+<h1>Transactions</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <a href='/transaction/add' class="btn btn-primary" role="button">
+            <i class="fa fa-plus"></i>
+            Add Transaction
+        </a>
+    </div>
+    <div class="input-group col">
+        <input type="text" class="form-control" placeholder="Search transactions by Description"
+               @bind="SearchString" @bind:event="oninput" @onkeyup="FilterTransaction" />
+        @if (SearchString.Length > 0)
+        {
+            <div class="input-group-append">
+                <button class="btn btn-danger" @onclick="ResetSearch">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<br />
+@if (transactionList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped align-middle table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Ammount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Shared.Transaction transaction in transactionList)
+            {
+                <tr>
+                    <td>@transaction.Id</td>
+                    <td>@transaction.Date</td>
+                    <td>@transaction.Description</td>
+                    <td>@transaction.Entries.Where(e => e.Amount < 0).Select(e => e.Account.Name).FirstOrDefault()</td>
+                    <td>@transaction.Entries.Where(e => e.Amount > 0).Select(e => e.Account.Name).FirstOrDefault()</td>
+                    <td>@Math.Abs(transaction.Entries.ElementAtOrDefault(0).Amount)</td>
+                    <td>
+                        <a href='/transaction/edit/@transaction.Id' class="btn btn-outline-dark" role="button">
+                            Edit
+                        </a>
+                        <a href='/transaction/edit/@transaction.Id' class="btn btn-outline-danger" role="button">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+@code {
+    protected List<Transaction> transactionList = new();
+    protected List<Transaction> searchTranData = new();
+    //protected Account acc = new();
+    protected string SearchString { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        transactionList = (await tranService.GetTransactionsAsync()).ToList();
+        searchTranData = transactionList;
+    }
+    protected void FilterTransaction()
+    {
+        if (!string.IsNullOrEmpty(SearchString))
+        {
+            transactionList = searchTranData
+                .Where(x => x.Description!.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
+                .ToList();
+        }
+        else
+        {
+            transactionList = searchTranData;
+        }
+    }
+    public void ResetSearch()
+    {
+        SearchString = string.Empty;
+        transactionList = searchTranData;
+    }
+}

@@ -1,0 +1,93 @@
+﻿@page "/Entry"
+@attribute [StreamRendering]
+@inject IEntryService entryService
+
+<h1>Entries</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <a href='/entry/add' class="btn btn-primary" role="button">
+            <i class="fa fa-plus"></i>
+            Add Entry
+        </a>
+    </div>
+    <div class="input-group col">
+        <input type="text" class="form-control" placeholder="Search entry by account"
+               @bind="SearchString" @bind:event="oninput" @onkeyup="FilterEntry" />
+        @if (SearchString.Length > 0)
+        {
+            <div class="input-group-append">
+                <button class="btn btn-danger" @onclick="ResetSearch">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<br />
+@if (entryList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped align-middle table-bordered">
+        <thead class="table-success">
+            <tr>
+                <th>ID</th>
+                <th>Ammount</th>
+                <th>Account ID</th>
+                <th>Transaction ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var entry in entryList)
+            {
+                <tr>
+                    <td>@entry.Id</td>
+                    <td>@entry.AccountId</td>
+                    <td>@entry.Amount</td>
+                    <td>@entry.TransactionId</td>
+                    <td>
+                        <a href='/entry/edit/@entry.Id' class="btn btn-outline-dark" role="button">
+                            Edit
+                        </a>
+                        <a href='/account/delete/@entry.Id' class="btn btn-outline-danger" role="button">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+@code {
+    protected List<Entry> entryList = new();
+    protected List<Entry> searchEntryData = new();
+    //protected Account acc = new();
+    protected string SearchString { get; set; } = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        entryList = (await entryService.GetEntriesAsync()).ToList();
+        searchEntryData = entryList;
+    }
+    protected void FilterEntry()
+    {
+        if (!string.IsNullOrEmpty(SearchString))
+        {
+            entryList = searchEntryData
+                .Where(x => x.Account.Name!.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
+                .ToList();
+        }
+        else
+        {
+            entryList = searchEntryData;
+        }
+    }
+    public void ResetSearch()
+    {
+        SearchString = string.Empty;
+        entryList = searchEntryData;
+    }
+}
