@@ -16,4 +16,8 @@
     <ProjectReference Include="..\PersonalFinance.Service\PersonalFinance.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages/Account/" />
+  </ItemGroup>
+
 </Project>
