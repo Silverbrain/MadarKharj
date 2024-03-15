@@ -12,12 +12,10 @@ public class Entry
     public int AccountId { get; set; }
 
     [ForeignKey("AccountId")]
-    [Required]
     public Account? Account { get; set; }
 
     public Guid TransactionId { get; set; }
 
     [ForeignKey("TransactionId")]
-    [Required]
     public Transaction? Transaction { get; set; }
 }
