@@ -11,7 +11,7 @@ public class TransactionRepository : ITransactionRepository
     private readonly PFDbContext dbContext;
     private readonly ILogger logger;
 
-    public TransactionRepository(PFDbContext dbContext, ILogger logger)
+    public TransactionRepository(PFDbContext dbContext, ILogger<TransactionRepository> logger)
     {
         this.dbContext = dbContext;
         this.logger = logger;
@@ -85,7 +85,7 @@ public class TransactionRepository : ITransactionRepository
     {
         try
         {
-            return await dbContext.Transactions.ToListAsync();
+            return await dbContext.Transactions.Include(t => t.Entries)!.ThenInclude(e => e.Account).ToListAsync();
         }
         catch (Exception e)
         {
