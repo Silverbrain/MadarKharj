@@ -11,7 +11,7 @@ public class EntryRepository : IEntryRepository
     private readonly PFDbContext dbContext;
     private readonly ILogger logger;
 
-    public EntryRepository(PFDbContext dbContext, ILogger logger)
+    public EntryRepository(PFDbContext dbContext, ILogger<EntryRepository> logger)
     {
         this.dbContext = dbContext;
         this.logger = logger;
