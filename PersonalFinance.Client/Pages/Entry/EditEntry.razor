@@ -1,0 +1,99 @@
+﻿@page "/entries/add"
+@page "/entries/edit/{entryId}"
+@rendermode InteractiveWebAssembly
+@inject HttpClient http
+@inject NavigationManager navigationManager
+@inject IEntryService entryService
+@* @inject ITransactionService tranService
+@inject IAccountService accService *@
+
+<h1>@Title Entry</h1>
+<hr />
+
+<EditForm FormName="EditOrAddEntry" Model="entry" OnValidSubmit="SaveEntry">
+    <DataAnnotationsValidator />
+    <div class="mb-3">
+        <label for="Amount" class="form-label">Amount</label>
+        <InputNumber @bind-Value="entry.Amount" />
+        <div class="col-md-4">
+            <ValidationMessage For="@(() => entry.Amount)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="AccountId" class="form-label">Account</label>
+        <InputNumber @bind-Value="entry.AccountId" />
+        <div class="col-md-4">
+            <ValidationMessage For="@(() => entry.AccountId)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="TransactionId" class="form-label">Transaction</label>
+        <InputText @bind-Value="entry.TransactionId" />
+        <div class="col-md-4">
+            <ValidationMessage For="@(() => entry.TransactionId)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href='/account' class="btn btn-light" role="button">Cancel</a>
+    </div>
+</EditForm>
+
+@code {
+    protected class EntryModel
+    {
+        public string? Id { get; set; }
+        public double? Amount { get; set; } 
+        public int? AccountId { get; set; }
+        public string? TransactionId { get; set; }
+    }
+
+    [Parameter]
+    public string? entryId { get; set; }
+
+    public Guid postEntryId = Guid.Empty;
+    protected string Title = "Add";
+    protected EntryModel entry = new();
+    protected override async Task OnParametersSetAsync()
+    {
+        if (entryId != null && Guid.TryParse(entryId, out postEntryId))
+        {
+            Title = "Edit";
+            var resEntry = await entryService.GetEntryAsync(postEntryId);
+            
+            if(resEntry != null)
+            {
+                entry.Id = resEntry.Id.ToString();
+                entry.Amount = resEntry.Amount;
+                entry.AccountId = resEntry.AccountId;
+                entry.TransactionId = resEntry.TransactionId.ToString();
+            }
+        }
+    }
+    protected async Task SaveEntry()
+    {
+        Guid postTransactionId = Guid.Empty;
+
+        Entry postEntry = new Entry
+        {
+            Amount = (double) entry.Amount!,
+            AccountId = (int) entry.AccountId!,
+            TransactionId = Guid.TryParse(entry.TransactionId, out postTransactionId) ? postTransactionId : Guid.Empty,
+        };
+
+        if (entry.Id == null)
+        {
+            await entryService.CreateEntryAsync(postEntry);
+        }
+        else
+        {
+            postEntry.Id = postEntryId;
+            await entryService.UpdateEntryAsync(postEntry);
+        }
+        Cancel();
+    }
+    public void Cancel()
+    {
+        navigationManager.NavigateTo("/entries");
+    }
+}

@@ -1,4 +1,4 @@
-﻿@page "/Entry"
+﻿@page "/Entries"
 @attribute [StreamRendering]
 @inject IEntryService entryService
 
@@ -6,13 +6,13 @@
 
 <div class="row">
     <div class="col-md-6">
-        <a href='/entry/add' class="btn btn-primary" role="button">
+        <a href='/entries/add' class="btn btn-primary" role="button">
             <i class="fa fa-plus"></i>
             Add Entry
         </a>
     </div>
     <div class="input-group col">
-        <input type="text" class="form-control" placeholder="Search entry by account"
+        <input type="text" class="form-control" placeholder="Search entry by account name"
                @bind="SearchString" @bind:event="oninput" @onkeyup="FilterEntry" />
         @if (SearchString.Length > 0)
         {
@@ -49,10 +49,10 @@ else
                     <td>@entry.Amount</td>
                     <td>@entry.TransactionId</td>
                     <td>
-                        <a href='/entry/edit/@entry.Id' class="btn btn-outline-dark" role="button">
+                        <a href='/entries/edit/@entry.Id' class="btn btn-outline-dark" role="button">
                             Edit
                         </a>
-                        <a href='/account/delete/@entry.Id' class="btn btn-outline-danger" role="button">
+                        <a href='/entries/delete/@entry.Id' class="btn btn-outline-danger" role="button">
                             Delete
                         </a>
                     </td>
@@ -77,7 +77,7 @@ else
         if (!string.IsNullOrEmpty(SearchString))
         {
             entryList = searchEntryData
-                .Where(x => x.Account.Name!.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
+                .Where(x => x.Account!.Name!.IndexOf(SearchString, StringComparison.OrdinalIgnoreCase) != -1)
                 .ToList();
         }
         else
