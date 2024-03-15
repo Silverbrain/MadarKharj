@@ -9,5 +9,7 @@ builder.Services.AddScoped(http => new HttpClient
 });
 
 builder.Services.AddScoped<IAccountService, ClientAccountService>();
+builder.Services.AddScoped<IEntryService, ClientEntryService>();
+builder.Services.AddScoped<ITransactionService, ClientTransactionService>();
 
 await builder.Build().RunAsync();

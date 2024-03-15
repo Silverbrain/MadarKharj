@@ -3,13 +3,18 @@ using PersonalFinance.Client.Pages;
 using PersonalFinance.Components;
 using PersonalFinance.Repository;
 using PersonalFinance.Service;
+using PersonalFinance.Extention;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
 
 builder.Services.AddControllers();
 
@@ -17,14 +22,12 @@ builder.Services.AddScoped(http => new HttpClient{
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseUri").Value!)
 });
 
-builder.Services.AddLogging(ops => ops.AddConsole());
-
 builder.Services.AddDbContext<PFDbContext>(ops =>{
     ops.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
-builder.Services.AddTransient<IAccountRepository, AccountRepository>();
-builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddAppRepositories();
+builder.Services.AddAppServices();
 
 var app = builder.Build();
 
@@ -42,10 +45,10 @@ else
 
 app.UseHttpsRedirection();
 
-app.MapControllers();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.MapControllers();
 
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
