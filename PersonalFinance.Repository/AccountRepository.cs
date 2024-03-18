@@ -70,7 +70,7 @@ public class AccountRepository : IAccountRepository
     {
         try
         {
-            var account = await dbContext.Accounts.FirstOrDefaultAsync(A => A.Id == accountId);
+            var account = await dbContext.Accounts.Include(a => a.Entries).FirstOrDefaultAsync(A => A.Id == accountId);
 
             if (account != null)
             {
@@ -92,7 +92,8 @@ public class AccountRepository : IAccountRepository
     {
         try
         {
-            return await dbContext.Accounts.ToListAsync();
+            var accs = await dbContext.Accounts.Include(a => a.Entries).ToListAsync();
+            return accs;
         }
         catch (Exception e)
         {
