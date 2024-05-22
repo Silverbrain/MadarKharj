@@ -11,7 +11,7 @@ namespace PersonalFinance.Test;
 
 public class AccountRepositoryTests
 {
-    private readonly ILogger logger;
+    private readonly ILogger<AccountRepository> logger;
 
     private async Task<PFDbContext> GetDbContext()
     {
@@ -70,7 +70,7 @@ public class AccountRepositoryTests
     public AccountRepositoryTests()
     {
         //Dependencies
-        logger = A.Fake<ILogger>();
+        logger = A.Fake<ILogger<AccountRepository>>();
     }
 
     [Fact]
