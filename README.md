@@ -67,4 +67,4 @@ Contributions are what makes the open-source community such an amazing place to 
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [`MIT License`](https://github.com/Silverbrain/MadarKharj?tab=MIT-1-ov-file) for more information.
